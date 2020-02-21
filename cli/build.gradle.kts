@@ -43,6 +43,35 @@ tasks.named<CreateStartScripts>("startScripts") {
     }
 }
 
+val fatJar by tasks.registering(Jar::class) {
+    archiveBaseName.set(application.applicationName)
+
+    manifest.from(tasks.jar.get().manifest)
+    manifest {
+        attributes["Main-Class"] = application.mainClassName
+    }
+
+    isZip64 = true
+
+    val classpath = configurations.runtimeClasspath.get().filterNot {
+        it.isFile && it.extension == "pom"
+    }.map {
+        if (it.isDirectory) it else zipTree(it)
+    }
+
+    from(classpath) {
+        exclude("META-INF/*.DSA")
+        exclude("META-INF/*.RSA")
+        exclude("META-INF/*.SF")
+    }
+
+    with(tasks.jar.get())
+}
+
+artifacts {
+    archives(fatJar)
+}
+
 repositories {
     jcenter()
 
