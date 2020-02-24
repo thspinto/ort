@@ -46,6 +46,7 @@ import com.here.ort.utils.log
 import com.here.ort.utils.showStackTrace
 import com.here.ort.utils.temporaryProperties
 
+import java.io.ByteArrayOutputStream
 import java.io.File
 import java.util.Properties
 import java.util.concurrent.TimeUnit
@@ -160,17 +161,37 @@ class Gradle(
             gradleConnector.daemonMaxIdleTime(10, TimeUnit.SECONDS)
         }
 
-        val gradleConnection = gradleConnector.forProjectDirectory(definitionFile.parentFile).connect()
+        val projectDir = definitionFile.parentFile
+        val gradleConnection = gradleConnector.forProjectDirectory(projectDir).connect()
 
         return temporaryProperties(*gradleSystemProperties.toTypedArray()) {
             gradleConnection.use { connection ->
                 val initScriptFile = File.createTempFile("init", ".gradle")
                 initScriptFile.writeBytes(javaClass.getResource("/scripts/init.gradle").readBytes())
 
+                val stdout = ByteArrayOutputStream()
+                val stderr = ByteArrayOutputStream()
+
                 val dependencyTreeModel = connection
                     .model(DependencyTreeModel::class.java)
+                    .setStandardOutput(stdout)
+                    .setStandardError(stderr)
                     .withArguments("--init-script", initScriptFile.path)
                     .get()
+
+                if (stdout.size() > 0) {
+                    log.debug {
+                        "Analyzing the project in '$projectDir' produced standard output:\n" +
+                                stdout.toString().prependIndent("\t")
+                    }
+                }
+
+                if (stderr.size() > 0) {
+                    log.warn {
+                        "Analyzing the project in '$projectDir' produced error output:\n" +
+                                stderr.toString().prependIndent("\t")
+                    }
+                }
 
                 if (!initScriptFile.delete()) {
                     log.warn { "Init script file '$initScriptFile' could not be deleted." }
