@@ -1,5 +1,3 @@
-package com.here.ort.model.config
-
 /*
  * Copyright (C) 2017-2019 HERE Europe B.V.
  *
@@ -18,6 +16,8 @@ package com.here.ort.model.config
  * SPDX-License-Identifier: Apache-2.0
  * License-Filename: LICENSE
  */
+
+package com.here.ort.model.config
 
 enum class RuleViolationResolutionReason {
     /**
