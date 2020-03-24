@@ -1,0 +1,221 @@
+trigger: none # Do not build branches on push.
+pr:
+- master
+
+schedules:
+- cron: "0 0 * * *"
+  displayName: Nightly build
+  branches:
+    include:
+    - master
+  always: true # Also build if there were no code changes, because many of our tests rely on external infrastructure.
+
+variables:
+  BOWER_VERSION: '1.8.8'
+  BUNDLER_VERSION: '2.1.4'
+  COMPOSER_VERSION: '5.1.0' # The version refers to the installer, not to Composer.
+  CONAN_VERSION: '1.18.0'
+  FLUTTER_VERSION: 'v1.7.8+hotfix.3-stable'
+  GO_DEP_VERSION: '0.5.4'
+  PYTHON_PIPENV_VERSION: '2018.11.26'
+  RUST_VERSION: '1.35.0'
+  STACK_VERSION: '2.1.3.20190715'
+  VIRTUALENV_VERSION: '20.0.14'
+
+stages:
+- stage: build_test
+  displayName: Build and Test
+  jobs:
+  # TODO: Consider running the Docker job only if the Dockerfile was changed.
+  - job: 'Docker'
+    pool:
+      vmImage: 'ubuntu-18.04'
+    steps:
+    - task: Docker@2
+      enabled: false
+      inputs:
+        command: 'build'
+        Dockerfile: 'Dockerfile'
+        tags: |
+          ort
+    # TODO: Add a step to run ORT in the Docker container, e.g. the requirements task.
+
+  # TODO: Add a separate job to run detekt to prevent running the matrix build if there are detekt errors?
+  #       Downside is that this requires separate cloning. Alternative is to run detekt only on one OS.
+  - job: 'Gradle'
+    strategy:
+      matrix:
+        Linux:
+          imageName: 'ubuntu-18.04'
+          gradleWrapper: 'gradlew'
+          FLUTTER_HOME: '/opt/flutter'
+        # TODO: Add a mac build.
+        Windows:
+          imageName: 'windows-2019'
+          gradleWrapper: 'gradlew.bat'
+          FLUTTER_HOME: 'C:\flutter'
+    pool:
+      vmImage: $(imageName)
+    steps:
+    - task: UsePythonVersion@0
+      displayName: Enable Python 3.6
+      inputs:
+        versionSpec: '3.6'
+        addToPath: true
+        architecture: 'x64'
+
+    # Linux requirements.
+    - bash: |
+        # Install apt packages.
+        sudo apt-get -qq install cvs
+
+        # Uninstall mono-devel because it contains the "lc" command which conflicts with BoyterLc.
+        sudo apt-get -qq remove mono-devel
+
+        # Install NPM packages.
+        sudo npm install -g bower@$BOWER_VERSION
+
+        # Install Python packages.
+        export PATH=$PATH:~/.local/bin
+        pip install --user \
+          conan==$CONAN_VERSION \
+          pipenv==$PYTHON_PIPENV_VERSION \
+          reuse \
+          virtualenv==$VIRTUALENV_VERSION
+        conan user # Create the conan data directory. Automatic detection of your arch, compiler, etc.
+
+        # Install Ruby packages.
+        sudo gem install bundler -v $BUNDLER_VERSION
+
+        # Install Flutter.
+        curl -Os https://storage.googleapis.com/flutter_infra/releases/stable/linux/flutter_linux_$FLUTTER_VERSION.tar.xz
+        tar xf flutter_linux_$FLUTTER_VERSION.tar.xz -C $(dirname $FLUTTER_HOME)
+        rm flutter_linux_$FLUTTER_VERSION.tar.xz
+        export PATH="$PATH:$FLUTTER_HOME/bin:$FLUTTER_HOME/bin/cache/dart-sdk/bin"
+        flutter config --no-analytics
+        flutter doctor
+
+        # Install git-repo.
+        mkdir ~/bin
+        export PATH=$PATH:~/bin
+        curl https://storage.googleapis.com/git-repo-downloads/repo > ~/bin/repo
+        chmod a+x ~/bin/repo
+
+        # Install Go Dep.
+        mkdir -p ~/go/bin
+        export PATH=$PATH:~/go/bin
+        curl https://raw.githubusercontent.com/golang/dep/v$GO_DEP_VERSION/install.sh | sh
+        echo "Which dep:"
+        which dep
+        ls -al ~/go/bin
+        echo "PATH=$PATH"
+
+        # Update PATH for next steps.
+        echo "##vso[task.setvariable variable=path;]$PATH"
+      condition: eq( variables['Agent.OS'], 'Linux' )
+      displayName: Install Linux requirements
+
+    # TODO: Add a step to run "reuse lint" (only on Linux?).
+
+    # Windows requirements.
+    - pwsh: |
+        # Install Chocolatey packages.
+        cinst composer --version $env:COMPOSER_VERSION -y --no-progress
+        cinst dep --version $env:GO_DEP_VERSION -y --no-progress
+        cinst haskell-stack --version $env:STACK_VERSION -y --no-progress
+        #cinst msys2 --params "/InstallDir=C:/msys64" --no-progress
+        refreshenv
+        echo "PATH: $env:PATH"
+        echo "Get-Command composer:"
+        Get-Command composer
+        echo "Get-Command composer.bat:"
+        Get-Command composer.bat
+        echo "composer version:"
+        composer --version
+        echo "composer.bat version:"
+        composer.bat --version
+        echo "C:\tools\php:"
+        Get-ChildItem -Path C:\tools\php -Force
+
+        # Install NPM packages.
+        npm install -g bower@$env:BOWER_VERSION
+
+        # Install Python packages.
+        pip install --user conan==$env:CONAN_VERSION pipenv==$env:PYTHON_PIPENV_VERSION reuse virtualenv==$env:VIRTUALENV_VERSION
+        pip show conan
+        conan user # Create the conan data directory. Automatic detection of your arch, compiler, etc.
+
+        # Install CVS.
+        #C:\msys64\usr\bin\bash -lc "pacman --noconfirm -Sy cvs"
+        #$env:PATH += ";C:\msys64\usr\bin"
+
+        # Install Flutter.
+        echo "Download Flutter"
+        Start-FileDownload "https://storage.googleapis.com/flutter_infra/releases/stable/windows/flutter_windows_$env:FLUTTER_VERSION.zip"
+        echo "Unzip Flutter"
+        7z x flutter_windows_%FLUTTER_VERSION%.zip -oC:\ > nul
+        echo "Add Flutter to path"
+        $env:PATH += ";$env:FLUTTER_HOME\bin;$env:FLUTTER_HOME\bin\cache\dart-sdk\bin"
+        echo "Configure Flutter"
+        flutter config --no-analytics
+        echo "Run Flutter doctor"
+        flutter doctor
+
+        # Install git-repo.
+        echo "Download repo"
+        Start-FileDownload 'https://storage.googleapis.com/git-repo-downloads/repo' -FileName "$env:PROGRAMFILES\Git\usr\bin\repo"
+
+        echo "C:\flutter\bin:"
+        Get-ChildItem -Path C:\flutter\bin -Force
+        Get-ChildItem -Path C:\flutter\bin\cache\dart-sdk\bin -Force
+
+        # Update PATH for next steps.
+        echo "Update path"
+        echo "##vso[task.setvariable variable=path;]$env:PATH"
+      condition: eq( variables['Agent.OS'], 'Windows_NT' )
+      displayName: Install Windows requirements
+      errorActionPreference: continue
+      #ignoreLASTEXITCODE: true
+      failOnStderr: false
+
+    # Clone repository.
+    - checkout: self
+      fetchDepth: 1
+      submodules: recursive
+
+    # TODO: Add caching: https://docs.microsoft.com/en-us/azure/devops/pipelines/release/caching?view=azure-devops
+
+    - bash: cargo metadata --format-version=1 --manifest-path=analyzer/src/funTest/assets/projects/synthetic/cargo-subcrate/Cargo.toml
+      displayName: Cargo metadata
+
+    # Check requirements.
+    # Enable this task to check installed requirements, e.g. after upgrading the required version of a system
+    # dependency.
+    - task: Gradle@2
+      displayName: Check requirements
+      continueOnError: true
+      enabled: true
+      inputs:
+        gradleWrapperFile: $(gradleWrapper)
+        options: --console=plain --no-daemon -x reporter-web-app:yarnBuild
+        tasks: 'cli:run --args="requirements"'
+        javaHomeOption: 'JDKVersion'
+        jdkVersionOption: '1.11'
+        gradleOptions: '-Xmx4096m'
+
+    # Build and test.
+    - task: Gradle@2
+      displayName: Build and Test with Gradle
+      inputs:
+        gradleWrapperFile: $(gradleWrapper)
+        # TODO: Only exclude ExpensiveTag on PR builds.
+        options: --console=plain --no-daemon --stacktrace -Dkotest.tags.exclude=ExpensiveTag -Dkotest.assertions.multi-line-diff=simple
+        tasks: 'test funTest jacocoReport'
+        publishJUnitResults: true
+        testResultsFiles: '**/TEST-*.xml'
+        testRunTitle: $(imageName)
+        #codeCoverageToolOption: 'JaCoCo'
+        #codeCoverageClassFilter: '' # TODO: Define filters if required, e.g. '+:com.,+:org.,-:my.app*.*.'.
+        javaHomeOption: 'JDKVersion'
+        jdkVersionOption: '1.11'
+        gradleOptions: '-Xmx4096m'

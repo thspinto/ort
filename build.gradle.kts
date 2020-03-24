@@ -252,7 +252,7 @@ subprojects {
 
             systemProperties = listOf("kotest.tags.include", "kotest.tags.exclude").associateWith {
                 System.getProperty(it)
-            }
+            } + ("kotest.assertions.multi-line-diff" to "simple")
 
             testLogging {
                 events = setOf(TestLogEvent.STARTED, TestLogEvent.PASSED, TestLogEvent.SKIPPED, TestLogEvent.FAILED)

@@ -32,6 +32,8 @@ import org.ossreviewtoolkit.utils.CommandLineTool
 import org.ossreviewtoolkit.utils.log
 
 import com.vdurmont.semver4j.SemverException
+import org.ossreviewtoolkit.utils.expandTilde
+import org.ossreviewtoolkit.utils.getUserHomeDirectory
 
 import java.io.File
 import java.io.IOException
@@ -41,6 +43,11 @@ import org.reflections.Reflections
 
 class RequirementsCommand : CliktCommand(name = "requirements", help = "List the required command line tools.") {
     override fun run() {
+        println("PATH:")
+        System.getenv("PATH").split(File.pathSeparator).forEach {
+            println("  $it")
+        }
+
         val reflections = Reflections("org.ossreviewtoolkit")
         val classes = reflections.getSubTypesOf(CommandLineTool::class.java)
 
