@@ -45,8 +45,21 @@ class OrtImportOrder : Rule() {
         val sortedImports = importList.imports.sortedBy { it.importPath.toString() }
         if (importList.imports != sortedImports) {
             println(importList.containingKtFile.absolutePath())
-            println(importList.imports.joinToString { it.importPath.toString() })
-            println(sortedImports.joinToString { it.importPath.toString() })
+            val importStrings = importList.imports.mapTo(mutableListOf()) { it.importPath.toString() }
+            val sortedImportStrings = sortedImports.mapTo(mutableListOf()) { it.importPath.toString() }
+
+            val importStringsIterator = importStrings.iterator()
+            val sortedImportStringsIterator = sortedImportStrings.iterator()
+            while (importStringsIterator.hasNext() && importStringsIterator.hasNext() &&
+            importStrings.dropWhile { importString ->
+                (importString == sortedImportStrings.first()).also { if (it) sortedImportStrings.removeAt(0) }
+            }
+
+            importStrings.dropWhile { importString ->
+                (importString == sortedImportStrings.first()).also { if (it) sortedImportStrings.drop(1) }
+            }
+
+            println(sortedImports.joinToString("\n") { it.importPath.toString() })
         }
     }
 }
