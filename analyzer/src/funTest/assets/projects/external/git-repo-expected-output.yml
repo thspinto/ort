@@ -990,7 +990,7 @@ analyzer:
           path: ""
         vcs_processed:
           type: "Git"
-          url: "ssh://git@github.com/FasterXML/jackson-annotations.git"
+          url: "https://github.com/FasterXML/jackson-annotations.git"
           revision: "jackson-annotations-2.9.0"
           path: ""
       curations: []
@@ -1021,7 +1021,7 @@ analyzer:
           path: ""
         vcs_processed:
           type: "Git"
-          url: "ssh://git@github.com/FasterXML/jackson-core.git"
+          url: "https://github.com/FasterXML/jackson-core.git"
           revision: "jackson-core-2.9.6"
           path: ""
       curations: []
@@ -1052,7 +1052,7 @@ analyzer:
           path: ""
         vcs_processed:
           type: "Git"
-          url: "ssh://git@github.com/FasterXML/jackson-databind.git"
+          url: "https://github.com/FasterXML/jackson-databind.git"
           revision: "jackson-databind-2.9.6"
           path: ""
       curations: []
@@ -1143,9 +1143,9 @@ analyzer:
           path: ""
         vcs_processed:
           type: "Git"
-          url: "ssh://git@github.com/jsonld-java/jsonld-java.git"
+          url: "https://github.com/jsonld-java/jsonld-java.git"
           revision: ""
-          path: ""
+          path: "jsonld-java"
       curations: []
     - package:
         id: "Maven:com.github.spullara.mustache.java:compiler:0.7.9"
@@ -2672,7 +2672,7 @@ analyzer:
           path: ""
         vcs_processed:
           type: "Git"
-          url: "ssh://git@github.com/hamcrest/JavaHamcrest.git"
+          url: "https://github.com/hamcrest/JavaHamcrest.git"
           revision: ""
           path: ""
       curations: []

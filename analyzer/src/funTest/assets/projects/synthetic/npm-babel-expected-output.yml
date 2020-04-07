@@ -2331,7 +2331,7 @@ packages:
       path: ""
     vcs_processed:
       type: "Git"
-      url: "ssh://git@github.com/isaacs/abbrev-js.git"
+      url: "https://github.com/isaacs/abbrev-js.git"
       revision: "a9ee72ebc8fe3975f1b0c7aeb3a8f2a806a432eb"
       path: ""
   curations: []
@@ -2759,7 +2759,7 @@ packages:
       path: ""
     vcs_processed:
       type: "Git"
-      url: "git://git.coolaj86.com/coolaj86/atob.js.git"
+      url: "https://git.coolaj86.com/coolaj86/atob.js.git"
       revision: "755cfea7899074a17e83a248c7cfc3960d956d82"
       path: ""
   curations: []
@@ -8625,7 +8625,7 @@ packages:
       path: ""
     vcs_processed:
       type: "Git"
-      url: "ssh://git@github.com/mozilla/source-map.git"
+      url: "https://github.com/mozilla/source-map.git"
       revision: "326dd955a366569759d9537ef5f0f167c89d92d2"
       path: ""
   curations: []

@@ -879,7 +879,7 @@ packages:
       path: ""
     vcs_processed:
       type: "Git"
-      url: "git://git.coolaj86.com/coolaj86/atob.js.git"
+      url: "https://git.coolaj86.com/coolaj86/atob.js.git"
       revision: "755cfea7899074a17e83a248c7cfc3960d956d82"
       path: ""
   curations: []
@@ -1032,7 +1032,7 @@ packages:
       path: ""
     vcs_processed:
       type: "Git"
-      url: "ssh://git@github.com/kumavis/browser-stdout.git"
+      url: "https://github.com/kumavis/browser-stdout.git"
       revision: "456b7f33c2d535fc88cf732d1a0e2d48a7600a1b"
       path: ""
   curations: []
@@ -2800,7 +2800,7 @@ packages:
       path: ""
     vcs_processed:
       type: "Git"
-      url: "ssh://git@github.com/IonicaBizau/is-win.git"
+      url: "https://github.com/IonicaBizau/is-win.git"
       revision: "77a92dda6c2a40cc10859b7d77d4d7e23eb27382"
       path: ""
   curations: []
@@ -4497,7 +4497,7 @@ packages:
       path: ""
     vcs_processed:
       type: "Git"
-      url: "ssh://git@github.com/mozilla/source-map.git"
+      url: "https://github.com/mozilla/source-map.git"
       revision: "326dd955a366569759d9537ef5f0f167c89d92d2"
       path: ""
   curations: []
@@ -4527,7 +4527,7 @@ packages:
       path: ""
     vcs_processed:
       type: "Git"
-      url: "ssh://git@github.com/mozilla/source-map.git"
+      url: "https://github.com/mozilla/source-map.git"
       revision: "ac518d2f21818146f3310557bd51c13d8cff2ba8"
       path: ""
   curations: []

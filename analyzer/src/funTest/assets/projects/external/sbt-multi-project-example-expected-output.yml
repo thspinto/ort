@@ -319,7 +319,7 @@ analyzer:
           path: ""
         vcs_processed:
           type: "Git"
-          url: "ssh://git@github.com/milessabin/shapeless.git"
+          url: "https://github.com/milessabin/shapeless.git"
           revision: ""
           path: ""
       curations: []
@@ -350,7 +350,7 @@ analyzer:
           path: ""
         vcs_processed:
           type: "Git"
-          url: "ssh://git@github.com/FasterXML/jackson-annotations.git"
+          url: "https://github.com/FasterXML/jackson-annotations.git"
           revision: "jackson-annotations-2.8.0"
           path: ""
       curations: []
@@ -380,7 +380,7 @@ analyzer:
           path: ""
         vcs_processed:
           type: "Git"
-          url: "ssh://git@github.com/FasterXML/jackson-core.git"
+          url: "https://github.com/FasterXML/jackson-core.git"
           revision: "jackson-core-2.8.9"
           path: ""
       curations: []
@@ -411,7 +411,7 @@ analyzer:
           path: ""
         vcs_processed:
           type: "Git"
-          url: "ssh://git@github.com/FasterXML/jackson-databind.git"
+          url: "https://github.com/FasterXML/jackson-databind.git"
           revision: "jackson-databind-2.8.9"
           path: ""
       curations: []
@@ -441,7 +441,7 @@ analyzer:
           path: ""
         vcs_processed:
           type: "Git"
-          url: "ssh://git@github.com/julien-truffaut/Monocle.git"
+          url: "https://github.com/julien-truffaut/Monocle.git"
           revision: ""
           path: ""
       curations: []
@@ -471,7 +471,7 @@ analyzer:
           path: ""
         vcs_processed:
           type: "Git"
-          url: "ssh://git@github.com/julien-truffaut/Monocle.git"
+          url: "https://github.com/julien-truffaut/Monocle.git"
           revision: ""
           path: ""
       curations: []
@@ -501,7 +501,7 @@ analyzer:
           path: ""
         vcs_processed:
           type: "Git"
-          url: "ssh://git@github.com/pureconfig/pureconfig.git"
+          url: "https://github.com/pureconfig/pureconfig.git"
           revision: ""
           path: ""
       curations: []
@@ -531,7 +531,7 @@ analyzer:
           path: ""
         vcs_processed:
           type: "Git"
-          url: "ssh://git@github.com/pureconfig/pureconfig.git"
+          url: "https://github.com/pureconfig/pureconfig.git"
           revision: ""
           path: ""
       curations: []
@@ -561,7 +561,7 @@ analyzer:
           path: ""
         vcs_processed:
           type: "Git"
-          url: "ssh://git@github.com/akka/akka.git"
+          url: "https://github.com/akka/akka.git"
           revision: ""
           path: ""
       curations: []
@@ -591,7 +591,7 @@ analyzer:
           path: ""
         vcs_processed:
           type: "Git"
-          url: "ssh://git@github.com/akka/akka.git"
+          url: "https://github.com/akka/akka.git"
           revision: ""
           path: ""
       curations: []
@@ -713,7 +713,7 @@ analyzer:
           path: ""
         vcs_processed:
           type: "Git"
-          url: "ssh://git@github.com/logstash/logstash-logback-encoder.git"
+          url: "https://github.com/logstash/logstash-logback-encoder.git"
           revision: "logstash-logback-encoder-4.11"
           path: ""
       curations: []
@@ -984,7 +984,7 @@ analyzer:
           path: ""
         vcs_processed:
           type: "Git"
-          url: "ssh://git@github.com/rickynils/scalacheck.git"
+          url: "https://github.com/rickynils/scalacheck.git"
           revision: ""
           path: ""
       curations: []
@@ -1014,7 +1014,7 @@ analyzer:
           path: ""
         vcs_processed:
           type: "Git"
-          url: "ssh://git@github.com/scalatest/scalatest.git"
+          url: "https://github.com/scalatest/scalatest.git"
           revision: ""
           path: ""
       curations: []
@@ -1044,7 +1044,7 @@ analyzer:
           path: ""
         vcs_processed:
           type: "Git"
-          url: "ssh://git@github.com/scalatest/scalatest.git"
+          url: "https://github.com/scalatest/scalatest.git"
           revision: ""
           path: ""
       curations: []
@@ -1104,7 +1104,7 @@ analyzer:
           path: ""
         vcs_processed:
           type: "Git"
-          url: "ssh://git@github.com/qos-ch/slf4j.git"
+          url: "https://github.com/qos-ch/slf4j.git"
           revision: ""
           path: ""
       curations: []
@@ -1134,7 +1134,7 @@ analyzer:
           path: ""
         vcs_processed:
           type: "Git"
-          url: "ssh://git@github.com/qos-ch/slf4j.git"
+          url: "https://github.com/qos-ch/slf4j.git"
           revision: ""
           path: ""
       curations: []
@@ -1164,7 +1164,7 @@ analyzer:
           path: ""
         vcs_processed:
           type: "Git"
-          url: "ssh://git@github.com/milessabin/macro-compat.git"
+          url: "https://github.com/milessabin/macro-compat.git"
           revision: ""
           path: ""
       curations: []

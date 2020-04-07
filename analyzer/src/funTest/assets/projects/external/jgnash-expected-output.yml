@@ -79,7 +79,7 @@ packages:
       path: ""
     vcs_processed:
       type: "Git"
-      url: "ssh://git@github.com/hamcrest/JavaHamcrest.git"
+      url: "https://github.com/hamcrest/JavaHamcrest.git"
       revision: ""
       path: ""
   curations: []
